@@ -103,28 +103,29 @@ def tail_part(l=40):
     return s3d.at(s3d.wedge("tail", 50, 16, l, top=16), rx=80)
 
 
-def chicken_legs(h=87, gap=62):
-    left = s3d.at(chicken_leg(h), x=-gap / 2)
+def chicken_legs(h=87, gap=62, **leg):
+    left = s3d.at(chicken_leg(h, **leg), x=-gap / 2)
     right = s3d.transform(s3d.copy(left), mirror="x")
     s3d.join(left, right)
     return left
 
 
-def chicken_leg(h=87, d=11, toe_l=40, toe_w=9, toe_h=7):
+def chicken_leg(h=87, d=11, toe_l=40, toe_w=9, toe_h=7, claws=True):
     """A shank on a flat foot: three toes forward, one back, claws at the tips."""
     shank = s3d.cylinder("shank", d, h)
     ankle = s3d.cylinder("ankle", d * 2, toe_h)
-    toes = [toe("toe_f", toe_l, toe_w, toe_h, -90 + a) for a in (-38, 0, 38)]
-    toes.append(toe("toe_b", toe_l * 0.6, toe_w, toe_h, 90))
+    toes = [toe("toe_f", toe_l, toe_w, toe_h, -90 + a, claws) for a in (-38, 0, 38)]
+    toes.append(toe("toe_b", toe_l * 0.6, toe_w, toe_h, 90, claws))
     s3d.join(shank, ankle, *toes)
     return shank
 
 
-def toe(name, l, w, h, angle):
+def toe(name, l, w, h, angle, claws=True):
     """A flat toe of length l from the ankle, turned by angle about the ankle, a claw at its tip."""
     bar = s3d.extrude(name, s3d.slot(l, w), h)
     claw = s3d.at(s3d.cone(name + "_claw", w * 0.9, w * 1.4, d2=1), x=l / 2 + w * 0.5, z=h / 2, ry=90)
-    s3d.join(bar, claw)
+    if claws:
+        s3d.join(bar, claw)
     c, s = math.cos(math.radians(angle)), math.sin(math.radians(angle))
     return s3d.at(bar, x=c * l / 2, y=s * l / 2, rz=angle)
 
