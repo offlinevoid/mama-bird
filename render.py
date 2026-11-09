@@ -18,7 +18,7 @@ for loc, e in (((-400, -500, 500), 3), ((400, -300, 200), 1.5)):
     ob.rotation_euler = (mathutils.Vector((0, 0, 160)) - mathutils.Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
 cam = bpy.data.objects.new('c', bpy.data.cameras.new('c')); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.type = 'ORTHO'; cam.data.ortho_scale = 400
-for name, loc in (('front', (0, -900, 160)), ('side', (900, 0, 160))):
+for name, loc in (('front', (0, -900, 160)), ('side', (900, 0, 160)), ('three_quarter', (-600, -700, 380))):
     cam.location = loc
     cam.rotation_euler = (mathutils.Vector((0, 0, 160)) - mathutils.Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
     sc.render.filepath = f'/tmp/claude-0/-home-user-mama-bird/26288649-cbd8-5bf3-a79d-569a14699ba0/scratchpad/{name}.png'
